@@ -1,0 +1,134 @@
+package com.emrek52.namazapp;
+
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.CountDownTimer;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+public class NamazAdapter extends ArrayAdapter<Namaz> {
+    private LayoutInflater layoutInflater;
+    private ArrayList<Namaz> namazArrayList;
+    private ViewHolder viewHolder;
+    private final Context context;
+
+    /* String[] dizi1 = {"#00bfff", "#00b2ee", "#009acd", "#87ceeb", "#00688b"};
+     String[] dizi2 = {"#c0ff3e", "#b3ee3a", "#9acd32", "#698b22","#6e8b3d"};*/
+    String[] dizi3 = {"#ffe413", "#ffd700", "#eec900", "#cdad00", "#8b7500"};
+
+    SimpleDateFormat bicim = new SimpleDateFormat("HH:mm");
+    Date date = new Date();
+
+    Namaz namaz;
+
+    String[] mevcut = bicim.format(date).split(":");
+    int mevcutsaat = Integer.parseInt(mevcut[0]);
+    int mevcutdakika = Integer.parseInt(mevcut[1]);
+
+
+    public NamazAdapter(Context context, ArrayList<Namaz> namazArrayList) {
+        super(context, 0, namazArrayList);
+        this.context = context;
+        this.namazArrayList = namazArrayList;
+        layoutInflater = LayoutInflater.from(context);
+    }
+
+
+    @Override
+    public int getCount() {
+        return namazArrayList.size();
+    }
+
+    @Override
+    public Namaz getItem(int position) {
+        return namazArrayList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    private static class ViewHolder {
+        TextView namazisim;
+        TextView kalanSure;
+        TextView namazsaati;
+        ImageView namazpng;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        namaz = namazArrayList.get(position);
+
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.list_row, null);
+            viewHolder = new ViewHolder();
+            viewHolder.namazisim = convertView.findViewById(R.id.namazAdı);
+            viewHolder.namazsaati = convertView.findViewById(R.id.namazSaati);
+            viewHolder.namazpng = convertView.findViewById(R.id.namazPng);
+            viewHolder.kalanSure = convertView.findViewById(R.id.kalan);
+            convertView.setTag(viewHolder);
+        } else
+            viewHolder = (ViewHolder) convertView.getTag();
+        if (namazArrayList != null) {
+            viewHolder.namazisim.setText(namaz.getNamazAdı());
+            viewHolder.namazsaati.setText(namaz.getNamazSaati());
+            viewHolder.namazpng.setImageResource(namaz.getResimId());
+            if (namaz.getKalanSure() > 0)
+                viewHolder.kalanSure.setText("Vaktin Çıkmasına " + namaz.getKalanSure() / 60 + ":" + (namaz.getKalanSure() % 60) + " dk kaldı");
+            else if (namaz.getKalanSure() == 0)
+                viewHolder.kalanSure.setText(namaz.getNamazAdı() + " Vakti");
+            else
+                viewHolder.kalanSure.setText("VAKİT GEÇTİ!");
+        }
+
+        System.out.println(namaz.getKalanSure());
+
+
+        String[] değisken = namaz.getNamazSaati().split(":");
+        int saat = Integer.parseInt(değisken[0]);
+        int dakika = Integer.parseInt(değisken[1]);
+
+
+        değistir(position, saat, dakika, convertView);
+
+
+        return convertView;
+    }
+
+
+    public void değistir(int position, int saat, int dakika, View convertView) {
+
+        int islenmisSaat = (mevcutsaat - saat) * 60;
+        int islenmisDakika = (mevcutdakika - dakika);
+        int toplam = islenmisDakika + islenmisSaat;
+
+
+        if (position == 0 && toplam >= 0)
+
+            convertView.setBackgroundColor(Color.parseColor(dizi3[0]));
+        else if (position == 1 && toplam >= 0)
+            convertView.setBackgroundColor(Color.parseColor(dizi3[1]));
+        else if (position == 2 && toplam >= 0)
+            convertView.setBackgroundColor(Color.parseColor(dizi3[2]));
+        else if (position == 3 && toplam >= 0)
+            convertView.setBackgroundColor(Color.parseColor(dizi3[3]));
+        else if (position == 4 && toplam >= 0)
+            convertView.setBackgroundColor(Color.parseColor(dizi3[4]));
+
+
+    }
+}
