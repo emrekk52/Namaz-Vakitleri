@@ -1,0 +1,182 @@
+package com.emrek52.namazapp;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.IBinder;
+import android.provider.Settings;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class MyNotifyService extends Service {
+
+    String sabahKaydet, ogleKaydet, ikindiKaydet, aksamKaydet, yatsiKaydet;
+
+
+    MainActivity sınıf = new MainActivity();
+
+
+    public MyNotifyService() {
+    }
+
+    @Override
+    public void onCreate() {
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("namazlar", Context.MODE_PRIVATE);
+
+        if (sınıf.kaydetSabah != null && sınıf.kaydetOgle != null && sınıf.kaydetIkindi != null && sınıf.kaydetAksam != null && sınıf.kaydetYatsi != null) {
+            sharedPreferences.edit().putString("namazsabah", sınıf.kaydetSabah).apply();
+            sharedPreferences.edit().putString("namazogle", sınıf.kaydetOgle).apply();
+            sharedPreferences.edit().putString("namazikindi", sınıf.kaydetAksam).apply();
+            sharedPreferences.edit().putString("namazaksam", sınıf.kaydetIkindi).apply();
+            sharedPreferences.edit().putString("namazyatsi", sınıf.kaydetYatsi).apply();
+        }
+
+        sabahKaydet = sharedPreferences.getString("namazsabah", null);
+        ogleKaydet = sharedPreferences.getString("namazogle", null);
+        ikindiKaydet = sharedPreferences.getString("namazikindi", null);
+        aksamKaydet = sharedPreferences.getString("namazaksam", null);
+        yatsiKaydet = sharedPreferences.getString("namazyatsi", null);
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while (1 == 1) {
+
+                    try {
+                        Thread.sleep(3000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    Notification bildirim;
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                   // sınıf.goster();
+
+
+                    System.out.println("sabah " + sabahKaydet);
+                    System.out.println("öğle " + ogleKaydet);
+                    System.out.println("ikindi " + ikindiKaydet);
+                    System.out.println("akşam " + aksamKaydet);
+                    System.out.println("yatsı " + yatsiKaydet);
+
+                    if (hesaplama(sabahKaydet)) {
+                        bildirim = new Notification.Builder(getApplicationContext())
+                                .setContentTitle("Sabah Namazı Vakti")
+                                .setContentText("En iyi uyku, sabah namazı ile bölünen uykudur.")
+                                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI).
+                                        setVibrate(new long[]{10, 500, 10}).
+                                        setLights(Color.MAGENTA, 300, 500).
+                                        setWhen(System.currentTimeMillis()).
+                                        setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, intent, 0)).
+                                        setSmallIcon(R.mipmap.camikucuk).
+                                        setAutoCancel(true).getNotification();
+
+                        manager.notify("notify", 0, bildirim);
+
+                    } else if (hesaplama(ogleKaydet)) {
+                        bildirim = new Notification.Builder(getApplicationContext())
+                                .setContentTitle("Öğle Namazı Vakti")
+                                .setContentText("Namaz kıldığında bir daha namaz kılmayacakmışsın gibi kıl.")
+                                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI).
+                                        setVibrate(new long[]{10, 500, 10}).
+                                        setLights(Color.MAGENTA, 300, 500).
+                                        setWhen(System.currentTimeMillis()).
+                                        setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, intent, 0)).
+                                        setSmallIcon(R.mipmap.camikucuk).
+                                        setAutoCancel(true).getNotification();
+
+                        manager.notify("notify", 0, bildirim);
+                    } else if (hesaplama(ikindiKaydet)) {
+                        bildirim = new Notification.Builder(getApplicationContext())
+                                .setContentTitle("İkindi Namazı Vakti")
+                                .setContentText("Namazı doğru kılanın, ağaçtan yaprakların döküldüğü gibi günahları dökülür.")
+                                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI).
+                                        setVibrate(new long[]{10, 500, 10}).
+                                        setLights(Color.MAGENTA, 300, 500).
+                                        setWhen(System.currentTimeMillis()).
+                                        setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, intent, 0)).
+                                        setSmallIcon(R.mipmap.camikucuk).
+                                        setAutoCancel(true).getNotification();
+
+                        manager.notify("notify", 0, bildirim);
+                    } else if (hesaplama(aksamKaydet)) {
+                        bildirim = new Notification.Builder(getApplicationContext())
+                                .setContentTitle("Akşam Namazı Vakti")
+                                .setContentText("Namaz, her hayrın, her iyiliğin anahtarıdır.")
+                                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI).
+                                        setVibrate(new long[]{10, 500, 10}).
+                                        setLights(Color.MAGENTA, 300, 500).
+                                        setWhen(System.currentTimeMillis()).
+                                        setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, intent, 0)).
+                                        setSmallIcon(R.mipmap.camikucuk).
+                                        setAutoCancel(true).getNotification();
+
+                        manager.notify("notify", 0, bildirim);
+                    }
+                    if (hesaplama(yatsiKaydet)) {
+                        bildirim = new Notification.Builder(getApplicationContext())
+                                .setContentTitle("Yatsı Namazı Vakti")
+                                .setContentText("Yatsı namazını cemaatle kılan, gecenin yarısını, sabahı da cemaatle kılan, gecenin tamamını ibadetle geçirmiş sayılır.")
+                                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI).
+                                        setVibrate(new long[]{10, 500, 10}).
+                                        setLights(Color.MAGENTA, 300, 500).
+                                        setWhen(System.currentTimeMillis()).
+                                        setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, intent, 0)).
+                                        setSmallIcon(R.mipmap.camikucuk).
+                                        setAutoCancel(true).getNotification();
+
+                        manager.notify("notify", 0, bildirim);
+                    }
+
+                }
+
+            }
+        }).start();
+
+
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        // TODO: Return the communication channel to the service.
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public boolean hesaplama(String gelenZaman) {
+
+
+        SimpleDateFormat saat = new SimpleDateFormat("HH:mm");
+        Date tarih = new Date();
+
+        String[] ayrıstırmaSaat = saat.format(tarih).split(":");
+        int saat1 = Integer.parseInt(ayrıstırmaSaat[0]);
+        int dakika1 = Integer.parseInt(ayrıstırmaSaat[1]);
+
+        String[] ayrıstırmaSaat2 = gelenZaman.split(":");
+        int saat2 = Integer.parseInt(ayrıstırmaSaat2[0]);
+        int dakika2 = Integer.parseInt(ayrıstırmaSaat2[1]);
+        return (saat1 == saat2 && dakika1 == dakika2);
+    }
+
+}
