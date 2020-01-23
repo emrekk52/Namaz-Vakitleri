@@ -1,0 +1,38 @@
+package com.emrek52.namazapp;
+
+public class Namaz {
+    private String namazAdı;
+    private String namazSaati;
+    private int resimId;
+    private int kalanSure;
+
+    public int getKalanSure() {
+        return kalanSure;
+    }
+
+
+    public String getNamazAdı() {
+        return namazAdı;
+    }
+
+    public Namaz(String namazAdı, String namazSaati, int kalanSure, int resimId) {
+        this.namazAdı = namazAdı;
+        this.namazSaati = namazSaati;
+        this.kalanSure = kalanSure;
+        this.resimId = resimId;
+
+
+    }
+
+
+    public String getNamazSaati() {
+        return namazSaati;
+    }
+
+
+    public int getResimId() {
+        return resimId;
+    }
+
+
+}
