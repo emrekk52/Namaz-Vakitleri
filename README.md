@@ -2,6 +2,10 @@
 
 * Bu uygulama mobil uygulama geliştirmeye başladığımda öğrendiğim tüm bilgileri kullanmaya çalıştığım ilk uygulamam
 * Uygulama namaz vakitlerinin vermekle birlikte sesli olarak okuma, imsakiye ve zikir matik gibi fonksiyonlara da sahip
+* 81 il için vakitler listelenmektedir fakat bazı ilçelerin bilgisi bulunmuyor
+* Uygulamada, internet bağlantısı saptanması ile birlikte vakitler otomatik güncellenir ve 30 gün boyunca yenilemeden internetsiz kulanım sağlar
+* Vakit geldiğinde bildirim sağlar ve her vakitte kullanıcıya çeşitli hadisler sunar
+* Her girişte farklı dualar ve hadisler önerir
 * İlk uygulamam olması sebebiyle çeşitli bug, crash ve hatalar bulunuyor
 
 # Uygulama içi görüntüler
